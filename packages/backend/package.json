@@ -6,9 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "npx tsc",
-    "start": "node dist/index.js",
+    "start": "node dist/index.ts",
     "dev": "nodemon src/index.ts",
-    "seed": "node src/seed/populate-db.ts"
+    "seed": "node src/seed/populate-db.js"
   },
   "keywords": [],
   "author": "",
