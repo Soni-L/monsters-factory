@@ -1,13 +1,13 @@
-import express, { Express, Request, Response } from "express";
+import express, { Express } from "express";
 import mongoose from "mongoose";
-import monsterRouter from './routes/monster'
+import monsterRouter from "./routes/monster";
 import dotenv from "dotenv";
 
 dotenv.config();
 
 const app: Express = express();
 const port = process.env.PORT || 3000;
-const MONGO_URI = "mongodb+srv://acdsoni:TWPuQcc1SJPqDoDz@cluster0.a6eqwgt.mongodb.net/";
+const MONGO_URI = process.env.MONGO_URI || "";
 
 app.use(express.json());
 
