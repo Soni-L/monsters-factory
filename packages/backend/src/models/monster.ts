@@ -1,7 +1,5 @@
-const mongoose = require("mongoose");
+import { Schema, model, Document } from "mongoose";
 
-// Define schema
-const Schema = mongoose.Schema;
 
 const MonsterSchema = new Schema({
   name: { type: String, required: true },
@@ -14,4 +12,6 @@ const MonsterSchema = new Schema({
 });
 
 // Compile model from schema
-module.exports = mongoose.model("Monster", MonsterSchema);
+const Monster = model("Monster", MonsterSchema);
+
+export default Monster;

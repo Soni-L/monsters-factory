@@ -1,6 +1,6 @@
 // Import the mongoose module
-const mongoose = require("mongoose");
-const Monster = require("../models/Monster.ts");
+import mongoose from "mongoose";
+import Monster from "../models/monster";
 
 const monsters = [
   {
