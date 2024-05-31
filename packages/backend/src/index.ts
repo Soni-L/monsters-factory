@@ -1,4 +1,5 @@
-import express, { Express } from "express";
+import express, { Express, Request } from "express";
+import cors from 'cors'
 import mongoose from "mongoose";
 import monsterRouter from "./routes/monster";
 import dotenv from "dotenv";
@@ -9,9 +10,11 @@ const app: Express = express();
 const port = process.env.PORT || 3000;
 const MONGO_URI = process.env.MONGO_URI || "";
 
+app.use(cors());
 app.use(express.json());
 
 app.use("/", monsterRouter);
+
 
 mongoose
   .connect(MONGO_URI, {})

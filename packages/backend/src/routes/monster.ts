@@ -5,7 +5,7 @@ const router = Router();
 
 router.get("/", async (req: Request, res: Response) => {
   //   const users = await User.find();
-  res.send("users");
+ res.json({ user : 'usr'});
 });
 
 router.post("/", async (req: Request, res: Response) => {
