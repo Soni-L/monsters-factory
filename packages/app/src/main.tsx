@@ -1,28 +1,32 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import App from './App.tsx'
-import './index.css'
-import DisplayMonsters from './routes/DisplayMonsters.tsx';
-import MonsterShow from './routes/MonsterShow.tsx';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import Navbar from "./components/Navbar.tsx";
+import "./index.css";
+import DisplayMonsters from "./routes/DisplayMonsters.tsx";
+import CreateMonsters from "./routes/CreateMonsters.tsx";
+import MonsterShow from "./routes/MonsterShow.tsx";
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <App />,
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: "#512888",
+    },
   },
-  {
-    path: "list",
-    element: <DisplayMonsters />,
-  },
-  {
-    path: "show",
-    element: <MonsterShow />,
-  },
-]);
+});
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <ThemeProvider theme={theme}>
+      <BrowserRouter>
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<DisplayMonsters />}></Route>
+          <Route path="/new" element={<CreateMonsters />}></Route>
+          <Route path="/show" element={<MonsterShow />}></Route>
+        </Routes>
+      </BrowserRouter>
+    </ThemeProvider>
   </React.StrictMode>
 );
