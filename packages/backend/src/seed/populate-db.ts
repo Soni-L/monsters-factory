@@ -2,27 +2,6 @@
 import mongoose from "mongoose";
 import Monster from "../models/monster";
 
-function createImageUrl(species: string, level: number): string {
-  const formattedSpecies = encodeURIComponent(species);
-  function stringToColor(text: string) {
-    // Generate a hash code from the input text
-    let hash = 0;
-    for (let i = 0; i < text.length; i++) {
-      hash = text.charCodeAt(i) + ((hash << 5) - hash);
-    }
-
-    // Convert hash code to hex
-    const color =
-      ((hash >> 16) & 0xff).toString(16).padStart(2, "0") +
-      ((hash >> 8) & 0xff).toString(16).padStart(2, "0") +
-      (hash & 0xff).toString(16).padStart(2, "0");
-
-    return color.toUpperCase();
-  }
-  const generatedColor = stringToColor(species);
-  return `https://via.placeholder.com/500x300/${generatedColor}/FFFFFF?text=${formattedSpecies}+${level}`;
-}
-
 const monsters = [
   {
     name: "Fire Dragon",
@@ -31,7 +10,6 @@ const monsters = [
       species: "Dragon",
       sub_species: "Fire",
     },
-    img: createImageUrl("Fire Dragon", 10),
   },
   {
     name: "Ice Golem",
@@ -40,7 +18,6 @@ const monsters = [
       species: "Golem",
       sub_species: "Ice",
     },
-    img: createImageUrl("Ice Golem", 7),
   },
   {
     name: "Vampire Lord",
@@ -49,7 +26,6 @@ const monsters = [
       species: "Vampire",
       sub_species: "Lord",
     },
-    img: createImageUrl("Vampire Lord", 12),
   },
   {
     name: "Forest Troll",
@@ -58,7 +34,6 @@ const monsters = [
       species: "Troll",
       sub_species: "Forest",
     },
-    img: createImageUrl("Forest Troll", 5),
   },
   {
     name: "Thunder Griffin",
@@ -67,7 +42,6 @@ const monsters = [
       species: "Griffin",
       sub_species: "Thunder",
     },
-    img: createImageUrl("Thunder Griffin", 9),
   },
   {
     name: "Shadow Fiend",
@@ -76,7 +50,6 @@ const monsters = [
       species: "Fiend",
       sub_species: "Shadow",
     },
-    img: createImageUrl("Shadow Fiend", 8),
   },
   {
     name: "Water Serpent",
@@ -85,7 +58,6 @@ const monsters = [
       species: "Serpent",
       sub_species: "Water",
     },
-    img: createImageUrl("Water Serpent", 6),
   },
   {
     name: "Earth Elemental",
@@ -94,7 +66,6 @@ const monsters = [
       species: "Elemental",
       sub_species: "Earth",
     },
-    img: createImageUrl("Earth Elemental", 11),
   },
   {
     name: "Storm Giant",
@@ -103,7 +74,6 @@ const monsters = [
       species: "Giant",
       sub_species: "Storm",
     },
-    img: createImageUrl("Storm Giant", 13),
   },
   {
     name: "Phoenix",
@@ -112,7 +82,6 @@ const monsters = [
       species: "Bird",
       sub_species: "Fire",
     },
-    img: createImageUrl("Phoenix", 14),
   },
   {
     name: "Swamp Hydra",
@@ -121,7 +90,6 @@ const monsters = [
       species: "Hydra",
       sub_species: "Swamp",
     },
-    img: createImageUrl("Swamp Hydra", 10),
   },
   {
     name: "Stone Gargoyle",
@@ -130,7 +98,6 @@ const monsters = [
       species: "Gargoyle",
       sub_species: "Stone",
     },
-    img: createImageUrl("Stone Gargoyle", 6),
   },
   {
     name: "Lava Behemoth",
@@ -139,7 +106,6 @@ const monsters = [
       species: "Behemoth",
       sub_species: "Lava",
     },
-    img: createImageUrl("Lava Behemoth", 15),
   },
   {
     name: "Nightmare Steed",
@@ -148,7 +114,6 @@ const monsters = [
       species: "Steed",
       sub_species: "Nightmare",
     },
-    img: createImageUrl("Nightmare Steed", 9),
   },
   {
     name: "Sand Wraith",
@@ -157,7 +122,6 @@ const monsters = [
       species: "Wraith",
       sub_species: "Sand",
     },
-    img: createImageUrl("Sand Wraith", 8),
   },
   {
     name: "Crystal Fairy",
@@ -166,7 +130,6 @@ const monsters = [
       species: "Fairy",
       sub_species: "Crystal",
     },
-    img: createImageUrl("Crystal Fairy", 4),
   },
   {
     name: "Golden Griffin",
@@ -175,7 +138,6 @@ const monsters = [
       species: "Griffin",
       sub_species: "Golden",
     },
-    img: createImageUrl("Golden Griffin", 11),
   },
   {
     name: "Necromancer",
@@ -184,7 +146,6 @@ const monsters = [
       species: "Undead",
       sub_species: "Necromancer",
     },
-    img: createImageUrl("Necromancer", 12),
   },
   {
     name: "Plague Rat",
@@ -193,7 +154,6 @@ const monsters = [
       species: "Rat",
       sub_species: "Plague",
     },
-    img: createImageUrl("Plague Rat", 3),
   },
   {
     name: "Frost Giant",
@@ -202,7 +162,6 @@ const monsters = [
       species: "Giant",
       sub_species: "Frost",
     },
-    img: createImageUrl("Frost Giant", 14),
   },
   {
     name: "Jungle Panther",
@@ -211,7 +170,6 @@ const monsters = [
       species: "Panther",
       sub_species: "Jungle",
     },
-    img: createImageUrl("Jungle Panther", 7),
   },
   {
     name: "Dark Elf",
@@ -220,7 +178,6 @@ const monsters = [
       species: "Elf",
       sub_species: "Dark",
     },
-    img: createImageUrl("Dark Elf", 10),
   },
   {
     name: "Cave Troll",
@@ -229,7 +186,6 @@ const monsters = [
       species: "Troll",
       sub_species: "Cave",
     },
-    img: createImageUrl("Cave Troll", 5),
   },
   {
     name: "Lightning Phoenix",
@@ -238,7 +194,6 @@ const monsters = [
       species: "Bird",
       sub_species: "Lightning",
     },
-    img: createImageUrl("Lightning Phoenix", 13),
   },
   {
     name: "Shadow Assassin",
@@ -247,7 +202,6 @@ const monsters = [
       species: "Assassin",
       sub_species: "Shadow",
     },
-    img: createImageUrl("Shadow Assassin", 11),
   },
   {
     name: "Mountain Giant",
@@ -256,7 +210,6 @@ const monsters = [
       species: "Giant",
       sub_species: "Mountain",
     },
-    img: createImageUrl("Mountain Giant", 12),
   },
   {
     name: "Sea Serpent",
@@ -265,7 +218,6 @@ const monsters = [
       species: "Serpent",
       sub_species: "Sea",
     },
-    img: createImageUrl("Sea Serpent", 9),
   },
   {
     name: "Desert Scorpion",
@@ -274,7 +226,6 @@ const monsters = [
       species: "Scorpion",
       sub_species: "Desert",
     },
-    img: createImageUrl("Desert Scorpion", 6),
   },
   {
     name: "Spirit Walker",
@@ -283,7 +234,6 @@ const monsters = [
       species: "Walker",
       sub_species: "Spirit",
     },
-    img: createImageUrl("Spirit Walker", 7),
   },
   {
     name: "Venomous Spider",
@@ -292,9 +242,73 @@ const monsters = [
       species: "Spider",
       sub_species: "Venomous",
     },
-    img: createImageUrl("Venomous Spider", 5),
+  },
+  {
+    name: "Ghost Pirate",
+    level: 8,
+    type: {
+      species: "Ghost",
+      sub_species: "Pirate",
+    },
+  },
+  {
+    name: "Blazing Imp",
+    level: 6,
+    type: {
+      species: "Imp",
+      sub_species: "Blazing",
+    },
+  },
+  {
+    name: "Toxic Slime",
+    level: 4,
+    type: {
+      species: "Slime",
+      sub_species: "Toxic",
+    },
+  },
+  {
+    name: "Iron Golem",
+    level: 12,
+    type: {
+      species: "Golem",
+      sub_species: "Iron",
+    },
+  },
+  {
+    name: "Arcane Sorcerer",
+    level: 14,
+    type: {
+      species: "Sorcerer",
+      sub_species: "Arcane",
+    },
+  },
+  {
+    name: "Dire Wolf",
+    level: 9,
+    type: {
+      species: "Wolf",
+      sub_species: "Dire",
+    },
+  },
+  {
+    name: "Feral Centaur",
+    level: 7,
+    type: {
+      species: "Centaur",
+      sub_species: "Feral",
+    },
+  },
+  {
+    name: "Frost Lich",
+    level: 13,
+    type: {
+      species: "Lich",
+      sub_species: "Frost",
+    },
   },
 ];
+
 
 async function insertMonsters() {
   try {

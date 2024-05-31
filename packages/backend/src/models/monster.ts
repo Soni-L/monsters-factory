@@ -8,7 +8,6 @@ const MonsterSchema = new Schema({
     species: { type: String, required: true },
     sub_species: { type: String, required: true },
   },
-  img: { type: String, required: true },
 });
 
 // Compile model from schema
