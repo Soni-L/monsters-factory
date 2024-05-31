@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import TablePagination from "@mui/material/TablePagination";
+import { TablePagination } from "@mui/material";
+import ActionsMenu from "../components/ActionsMenu";
 const BACKEND_URL = import.meta.env.VITE_APP_BACKEND_URL;
 
 interface MonsterType {
@@ -43,22 +44,39 @@ export default function DisplayMonsters() {
   const [limit, setLimit] = useState(10);
   const [totalElements, setTotalElements] = useState(1);
 
-  useEffect(() => {
-    const fetchMonsters = async () => {
-      try {
-        const response = await fetch(
-          `${BACKEND_URL}?page=${page}&limit=${limit}`
-        );
-        const data: MonstersResponse = await response.json();
+  const fetchMonsters = async (page: number, limit: number) => {
+    try {
+      const response = await fetch(
+        `${BACKEND_URL}?page=${page}&limit=${limit}`
+      );
+      const data: MonstersResponse = await response.json();
 
-        setMonsters(data.monsters);
-        setTotalElements(data.total);
-      } catch (error) {
-        console.error("Error fetching monsters:", error);
+      setMonsters(data.monsters);
+      setTotalElements(data.total);
+    } catch (error) {
+      console.error("Error fetching monsters:", error);
+    }
+  };
+
+  const deleteMonster = async (monster: Monster) => {
+    try {
+      const response = await fetch(`${BACKEND_URL}/${monster._id}`, {
+        method: "DELETE",
+      });
+
+      const result = await response.json();
+      if (response.ok) {
+        fetchMonsters(1, limit);
+      } else {
+        console.error(result.message || "Failed to delete monster");
       }
-    };
+    } catch (error) {
+      console.error("An error occurred");
+    }
+  };
 
-    fetchMonsters();
+  useEffect(() => {
+    fetchMonsters(page, limit);
   }, [page, limit]);
 
   const handleChangePage = (
@@ -73,6 +91,12 @@ export default function DisplayMonsters() {
   ) => {
     setLimit(parseInt(event.target.value, 10));
     setPage(1);
+  };
+
+  const handleDeleteMonster = (monster: Monster) => {
+    if (confirm(`Delete ${monster.name}?`) == true) {
+      deleteMonster(monster);
+    }
   };
 
   return (
@@ -107,8 +131,13 @@ export default function DisplayMonsters() {
                   stringToColorCode(
                     monster?.type?.species + monster?.type?.sub_species
                   ),
+                display: "flex",
+                justifyContent: "end",
               }}
-            ></div>
+            >
+              <ActionsMenu onDelete={() => handleDeleteMonster(monster)} />
+            </div>
+
             <div>
               {monster.name} level:
               <span style={{ fontWeight: "bold" }}>{monster.level}</span>
@@ -132,6 +161,7 @@ export default function DisplayMonsters() {
         onPageChange={handleChangePage}
         rowsPerPage={limit}
         onRowsPerPageChange={handleChangeRowsPerPage}
+        labelRowsPerPage={"Items per page"}
       />
     </>
   );

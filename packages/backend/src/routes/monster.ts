@@ -31,4 +31,18 @@ router.post("/", async (req: Request, res: Response) => {
   //res.status(201).json(user);
 });
 
+router.delete("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await Monster.findByIdAndDelete(id);
+    if (result) {
+      res.status(200).send({ message: "Monster deleted successfully" });
+    } else {
+      res.status(404).send({ message: "Monster not found" });
+    }
+  } catch (error) {
+    res.status(500).send({ message: "An error occurred", error });
+  }
+});
+
 export default router;
