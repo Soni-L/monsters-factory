@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { TablePagination } from "@mui/material";
 import ActionsMenu from "../components/ActionsMenu";
 const BACKEND_URL = import.meta.env.VITE_APP_BACKEND_URL;
-
 interface MonsterType {
   species: string;
   sub_species: string;
