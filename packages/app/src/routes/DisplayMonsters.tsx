@@ -5,7 +5,9 @@ const BACKEND_URL = import.meta.env.VITE_APP_BACKEND_URL;
 interface Monster {
   _id: string;
   name: string;
+  level: number;
   type: object;
+  img: string;
 }
 
 interface MonstersResponse {
@@ -54,12 +56,43 @@ export default function DisplayMonsters() {
   };
 
   return (
-    <div style={{ padding: "10px" }}>
-      {monsters.map((monster: Monster) => (
-        <div key={monster._id}>{monster.name}</div>
-      ))}
+    <>
+      <div
+        style={{
+          padding: "10px",
+          display: "flex",
+          gap: "15px",
+          flexWrap: "wrap",
+          justifyContent: "center",
+          marginBottom: "40px",
+          overflowY: "scroll",
+          overflowX: "hidden",
+          height: "calc(100vh - 120px)",
+        }}
+      >
+        {monsters.map((monster: Monster) => (
+          <div
+            key={monster._id}
+            style={{ display: "flex", flexDirection: "column" }}
+          >
+            <img
+              style={{ height: "200px", width: "300px" }}
+              src={monster.img}
+            ></img>
+            {monster.name}
+          </div>
+        ))}
+      </div>
 
       <TablePagination
+        style={{
+          position: "fixed",
+          bottom: 0,
+          borderTop: "1px solid gray",
+          width: "100%",
+          backgroundColor: "#7349AC",
+          color: "white",
+        }}
         component="div"
         count={totalElements}
         page={page - 1}
@@ -67,6 +100,6 @@ export default function DisplayMonsters() {
         rowsPerPage={limit}
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
-    </div>
+    </>
   );
 }
