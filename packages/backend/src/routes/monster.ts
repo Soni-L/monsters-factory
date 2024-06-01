@@ -10,7 +10,10 @@ router.get("/", async (req: Request, res: Response) => {
     const limit = parseInt(req.query.limit as string) || 10;
     const skip = (page - 1) * limit;
 
-    const monsters = await Monster.find({}).skip(skip).limit(limit);
+    const monsters = await Monster.find({})
+      .sort({ _id: -1 })
+      .skip(skip)
+      .limit(limit);
     const total = await Monster.countDocuments({});
 
     res.json({
@@ -25,10 +28,19 @@ router.get("/", async (req: Request, res: Response) => {
 });
 
 router.post("/", async (req: Request, res: Response) => {
-  //   const { name, email, password } = req.body;
-  //   const user = new User({ name, email, password });
-  //   await user.save();
-  //res.status(201).json(user);
+  try {
+    const monsters = req.body;
+    if (!Array.isArray(monsters)) {
+      return res
+        .status(400)
+        .send({ error: "Invalid input, expected an array of monsters" });
+    }
+
+    const savedMonsters = await Monster.insertMany(monsters);
+    res.status(201).send(savedMonsters);
+  } catch (error) {
+    res.status(500).send({ error: "could not save" });
+  }
 });
 
 router.delete("/:id", async (req, res) => {

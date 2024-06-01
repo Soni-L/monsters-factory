@@ -55,6 +55,7 @@ export default function CreateMonsters() {
     setMintedMonsters([]);
   };
 
+
   return (
     <div>
       <Box
