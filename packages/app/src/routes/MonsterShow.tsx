@@ -12,6 +12,26 @@ interface Monster {
   type: MonsterType;
 }
 
+function removeMatchingObjects(array1, array2) {
+  try {
+    // Create a set of _id values from the second array for quick lookup
+    const idsToRemove = new Set(array2.map((obj) => obj._id));
+
+    // Filter the first array to exclude objects with _id values found in the set
+    const resultArray = array1.filter((obj) => !idsToRemove.has(obj._id));
+
+    // Return the new array
+    return resultArray;
+  } catch {
+    return array1;
+  }
+}
+
+function isTimestampOlderThan10Seconds(timestamp) {
+  const currentTime = Math.floor(Date.now() / 1000); // Unix timestamp in seconds
+  return currentTime - timestamp > 10;
+}
+
 function stringToColorCode(text: string) {
   // Generate a hash code from the input text
   let hash = 0;
@@ -37,11 +57,15 @@ export default function MonsterShow() {
   useEffect(() => {
     //Fetch from backend every 5 seconds
     const fetchInterval = setInterval(async () => {
+      const limit = 20;
       try {
         //if there are more than 100 items in catche don't load more
-        if (cachedMonsters.current?.length <= 100) {
+        if (
+          cachedMonsters.current?.length < 100 &&
+          cachedMonsters.current.length < totalElements.current
+        ) {
           const response = await fetch(
-            `${BACKEND_URL}?page=${page.current}&limit=${10}`
+            `${BACKEND_URL}?page=${page.current}&limit=${limit}`
           );
           const data = await response.json();
 
@@ -63,7 +87,7 @@ export default function MonsterShow() {
           ];
 
           //if we are not on the last page we advance to the next
-          if (data.page * 10 <= data.total) {
+          if (data.page * limit <= data.total) {
             totalElements.current = data.total;
             page.current = Number(data.page) + 1;
           }
@@ -76,7 +100,7 @@ export default function MonsterShow() {
       } catch (error) {
         console.error("Error fetching monsters:", error);
       }
-    }, 5000);
+    }, 1000);
 
     return () => {
       clearInterval(fetchInterval);
@@ -86,7 +110,11 @@ export default function MonsterShow() {
   useEffect(() => {
     const displayEveryOneSecondInterval = setInterval(() => {
       if (displayMonsters.length == 0 && cachedMonsters.current.length > 0) {
-        setDisplayMonsters([cachedMonsters.current[0]]);
+        const newDisplayMonster = {
+          ...cachedMonsters.current[0],
+          timestamp: Math.floor(Date.now() / 1000),
+        };
+        setDisplayMonsters([newDisplayMonster]);
       }
 
       if (
@@ -97,38 +125,46 @@ export default function MonsterShow() {
           (item) =>
             item._id === cachedMonsters.current[displayMonsters.length]._id
         );
+
         if (!monsterInDisplay) {
-          setDisplayMonsters((prevData) => [
-            ...prevData,
-            cachedMonsters.current[prevData.length],
-          ]);
+          let newDisplayMonster = {
+            ...cachedMonsters.current[displayMonsters.length],
+            timestamp: Math.floor(Date.now() / 1000),
+          };
+          setDisplayMonsters((prevData) => [...prevData, newDisplayMonster]);
         }
       }
     }, 1000);
 
-    const tenSecondInterval = setInterval(() => {
+    const removeStaleMonsters = setInterval(() => {
       if (displayMonsters.length > 0 && cachedMonsters.current.length > 0) {
-        cachedMonsters.current = cachedMonsters.current.slice(1);
-        setDisplayMonsters((prevArray) => prevArray.slice(1));
+        const staleMonstersArray = displayMonsters.filter((monster) =>
+          isTimestampOlderThan10Seconds(monster.timestamp)
+        );
+
+        cachedMonsters.current = removeMatchingObjects(
+          cachedMonsters.current,
+          staleMonstersArray
+        );
+        setDisplayMonsters((prevArray) =>
+          removeMatchingObjects(prevArray, staleMonstersArray)
+        );
       }
-    }, 10000);
+    }, 1000);
 
     return () => {
       clearInterval(displayEveryOneSecondInterval);
-      clearInterval(tenSecondInterval);
+      clearInterval(removeStaleMonsters);
     };
   }, [displayMonsters]);
-
-  // console.log(displayMonsters)
 
   return (
     <div
       style={{
         padding: "10px",
-        display: "flex",
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr)",
         gap: "15px",
-        flexWrap: "wrap",
-        justifyContent: "center",
         marginBottom: "40px",
         overflowY: "scroll",
         overflowX: "hidden",
