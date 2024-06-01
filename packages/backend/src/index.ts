@@ -8,7 +8,7 @@ dotenv.config();
 
 const app: Express = express();
 const port = process.env.PORT || 3000;
-const MONGO_URI = process.env.MONGO_URI || "";
+const MONGO_URI = process.env.MONGO_URI || '';
 
 app.use(cors());
 app.use(express.json());
@@ -17,7 +17,7 @@ app.use("/", monsterRouter);
 
 
 mongoose
-  .connect(MONGO_URI, {})
+  .connect(MONGO_URI)
   .then(() => {
     console.log("Connected to MongoDB");
     app.listen(port, () => {

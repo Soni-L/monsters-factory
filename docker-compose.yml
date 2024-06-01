@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./packages/backend
+    ports:
+      - "3000:3000"
+    environment:
+      - MONGO_URI=${MONGO_URI}
+
+  app:
+    build:
+      context: ./packages/app
+    ports:
+      - "80:80"
+    environment:
+      - VITE_APP_BACKEND_URL=${VITE_APP_BACKEND_URL}
+    depends_on:
+      - backend

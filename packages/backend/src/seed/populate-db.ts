@@ -1,6 +1,11 @@
 // Import the mongoose module
 import mongoose from "mongoose";
 import Monster from "../models/monster";
+import dotenv from "dotenv";
+
+dotenv.config();
+
+const MONGO_URI = process.env.MONGO_URI || '';
 
 const monsters = [
   {
@@ -312,13 +317,7 @@ const monsters = [
 
 async function insertMonsters() {
   try {
-    await mongoose.connect(
-      "mongodb+srv://acdsoni:TWPuQcc1SJPqDoDz@cluster0.a6eqwgt.mongodb.net/",
-      {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-      }
-    );
+    await mongoose.connect(MONGO_URI);
 
     await Monster.insertMany(monsters);
     console.log("Monsters inserted successfully");
