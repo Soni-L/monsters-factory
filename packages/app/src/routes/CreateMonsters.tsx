@@ -1,9 +1,17 @@
-import React, { useEffect, useState } from "react";
-import { Tabs, Tab, Box, CircularProgress, Button } from "@mui/material";
+import React, { useState } from "react";
+import {
+  Tabs,
+  Tab,
+  Box,
+  CircularProgress,
+  Button,
+  Snackbar,
+} from "@mui/material";
 import NumberInput from "../components/NumberInput";
 import MintedMonstersDialog from "../components/MintedMonstersDialog";
 import generateRandomMonster from "../common/generateRandomMonster";
-
+import CustomMonsterForm from "../components/CustomMonsterForm";
+const BACKEND_URL = import.meta.env.VITE_APP_BACKEND_URL;
 interface MonsterType {
   species: string;
   sub_species: string;
@@ -24,6 +32,7 @@ export default function CreateMonsters() {
   );
   const [mintedMonstersDialog, setMintedMonstersDialog] =
     useState<boolean>(false);
+  const [openSnackbar, setOpenSnackbar] = React.useState(false);
 
   const handleGenerateRandomMonsters = (numberOfMonsters: number) => {
     setMintLoading(true);
@@ -55,6 +64,37 @@ export default function CreateMonsters() {
     setMintedMonsters([]);
   };
 
+  const handleCloseSnackbar = (
+    event: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpenSnackbar(false);
+  };
+
+  async function handleSave(data) {
+    try {
+      const response = await fetch(BACKEND_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      await response.json();
+      setOpenSnackbar(true);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  }
 
   return (
     <div>
@@ -100,10 +140,30 @@ export default function CreateMonsters() {
         </div>
       )}
 
+      {tab === 1 && (
+        <Box
+          sx={{
+            borderColor: "divider",
+            width: "350px",
+            margin: "auto",
+          }}
+        >
+          <CustomMonsterForm onSubmit={(monster) => handleSave([monster])} />
+        </Box>
+      )}
+
       <MintedMonstersDialog
         open={mintedMonstersDialog}
         handleClose={handleDialogClose}
         mintedMonsters={mintedMonsters}
+      />
+
+      <Snackbar
+        open={openSnackbar}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        message="Monsters saved"
       />
     </div>
   );
