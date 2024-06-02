@@ -13,7 +13,7 @@ services:
     build:
       context: ./packages/app
     ports:
-      - "80:5173"
+      - "5173:5173"
     environment:
       - VITE_APP_BACKEND_URL=${VITE_APP_BACKEND_URL}
     depends_on:
