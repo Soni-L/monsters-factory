@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { TablePagination } from "@mui/material";
+import { TablePagination, Typography, Skeleton } from "@mui/material";
 import ActionsMenu from "../components/ActionsMenu";
 import { stringToColorCode } from "../common/helperFunctions";
 import { Monster, MonstersResponse } from "../types/MonsterTypes";
@@ -66,27 +66,60 @@ export default function DisplayMonsters() {
     }
   };
 
-  return (
-    <>
+  if (monsters.length === 0) {
+    return (
       <div
         style={{
+          display: "grid",
+          overflowY: "hidden",
+          overflowX: "hidden",
+          height: "calc(100vh - 120px)",
+          margin: "auto",
+          gap: "10px",
+          gridTemplateColumns: "repeat(auto-fit, minmax(310px, 1fr)",
+          justifyContent: "center",
+          maxWidth: "1400px",
+        }}
+      >
+        {[...Array(20)].map(() => (
+          <Skeleton
+            animation="pulse"
+            style={{ height: "350px", width: "310px", margin: "0" }}
+          />
+        ))}
+      </div>
+    );
+  }
+
+  return (
+    <div
+      style={{
+        overflowY: "scroll",
+        overflowX: "hidden",
+        height: "calc(100vh - 120px)",
+      }}
+    >
+      <div
+        style={{
+          margin: "auto",
           padding: "10px",
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr)",
+          gridTemplateColumns: "repeat(auto-fit, minmax(310px, 1fr)",
           gap: "15px",
           justifyContent: "center",
           marginBottom: "40px",
-          overflowY: "scroll",
-          overflowX: "hidden",
-          height: "calc(100vh - 120px)",
+          maxWidth: "1400px",
         }}
       >
         {monsters.map((monster: Monster) => (
           <div
             key={monster._id}
             style={{
-              display: "flex",
-              flexDirection: "column",
+              border: "1px solid lightgray",
+              borderRadius: "6px",
+              boxShadow: "1px 1px",
+              padding: "4px",
+              width: "310px",
             }}
           >
             <div
@@ -122,9 +155,30 @@ export default function DisplayMonsters() {
               <ActionsMenu onDelete={() => handleDeleteMonster(monster)} />
             </div>
 
-            <div>
-              {monster.name} level:
-              <span style={{ fontWeight: "bold" }}>{monster.level}</span>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "2fr 3fr",
+                gap: "2px",
+                padding: "6px",
+              }}
+            >
+              <Typography>
+                <span style={{ fontWeight: "bold" }}>Name: </span>
+              </Typography>
+              <Typography>{monster.name}</Typography>
+              <Typography>
+                <span style={{ fontWeight: "bold" }}>Level: </span>
+              </Typography>
+              <Typography>{monster.level}</Typography>
+              <Typography>
+                <span style={{ fontWeight: "bold" }}>Species: </span>
+              </Typography>
+              <Typography>{monster.type.species}</Typography>
+              <Typography>
+                <span style={{ fontWeight: "bold" }}>Sub-species: </span>
+              </Typography>
+              <Typography>{monster.type.sub_species}</Typography>
             </div>
           </div>
         ))}
@@ -147,6 +201,6 @@ export default function DisplayMonsters() {
         onRowsPerPageChange={handleChangeRowsPerPage}
         labelRowsPerPage={"Items per page"}
       />
-    </>
+    </div>
   );
 }

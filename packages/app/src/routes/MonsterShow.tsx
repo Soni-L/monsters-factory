@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { stringToColorCode } from "../common/helperFunctions";
 import { Monster } from "../types/MonsterTypes";
-import { Card } from "@mui/material";
+import { Typography } from "@mui/material";
 const BACKEND_URL = import.meta.env.VITE_APP_BACKEND_URL;
 
 function removeMatchingObjects(array1, array2) {
@@ -23,6 +23,20 @@ function isTimestampOlderThan10Seconds(timestamp) {
   const currentTime = Math.floor(Date.now() / 1000); // Unix timestamp in seconds
   return currentTime - timestamp > 10;
 }
+
+const pulsatingTextStyle = {
+  animation: "pulsate 1s infinite cubic-bezier(.17,.67,.83,.67)",
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -300%)",
+  fontWeight: "bold",
+  fontFamily: "The halloween",
+  color: "yellow",
+  textShadow: "2px 2px #512888",
+  letterSpacing: "2px",
+  fontSize: "20px",
+};
 
 export default function MonsterShow() {
   const [displayMonsters, setDisplayMonsters] = useState([]);
@@ -134,61 +148,91 @@ export default function MonsterShow() {
     };
   }, [displayMonsters]);
 
+  if (displayMonsters.length === 0) {
+    return (
+      <div
+        style={{
+          backgroundColor: "black",
+          height: "calc(100vh - 64px)",
+          position: "relative",
+        }}
+      >
+        <Typography sx={pulsatingTextStyle}>Beginning show</Typography>
+      </div>
+    );
+  }
+
   return (
     <div
       style={{
-        backgroundColor: "black",
-        padding: "10px",
-        display: "grid",
-        gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr)",
-        justifyContent: "start",
-        gap: "15px",
         overflowY: "scroll",
         overflowX: "hidden",
         height: "calc(100vh - 65px)",
+        backgroundColor: "black",
       }}
     >
-      {displayMonsters.map((monster: Monster) => (
-        <div key={monster._id}>
-          <div
-            style={{
-              position: "relative",
-              height: "200px",
-              width: "300px",
-              backgroundColor:
-                "#" +
-                stringToColorCode(
-                  monster?.type?.species + monster?.type?.sub_species
-                ),
-              display: "flex",
-              justifyContent: "end",
-            }}
-          >
-            <p
+      <div
+        style={{
+          padding: "10px",
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, 310px)",
+          justifyContent: "center",
+          gap: "15px",
+          maxWidth: "1400px",
+          margin: "auto",
+        }}
+      >
+        {displayMonsters.map((monster: Monster) => (
+          <div key={monster._id} style={{ width: "310px" }}>
+            <div
               style={{
-                position: "absolute",
-                top: "50%",
-                left: "50%",
-                transform: "translate(-50%, -100%)",
-                fontWeight: "bold",
-                fontFamily: "The halloween",
-                fontSize: "9px",
-                color: "yellow",
-                textShadow: "2px 2px black",
-                letterSpacing: "1px",
+                position: "relative",
+                height: "200px",
+                width: "300px",
+                backgroundColor:
+                  "#" +
+                  stringToColorCode(
+                    monster?.type?.species + monster?.type?.sub_species
+                  ),
+                display: "flex",
+                justifyContent: "end",
               }}
             >
-              {monster.name}
-            </p>
+              <p
+                style={{
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -100%)",
+                  fontWeight: "bold",
+                  fontFamily: "The halloween",
+                  fontSize: "9px",
+                  color: "yellow",
+                  textShadow: "2px 2px black",
+                  letterSpacing: "1px",
+                }}
+              >
+                {monster.name}
+              </p>
+            </div>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: "2px",
+                padding: "2px 4px",
+                color: "yellow",
+                textShadow: "2px 2px #512888",
+              }}
+            >
+              <Typography>
+                {`${monster.type.species} ${monster.type.sub_species}`}
+              </Typography>
+              <Typography>level: {monster.level}</Typography>
+            </div>
           </div>
-          <div style={{ color: "white" }}>
-            {monster?.name} level:
-            <span style={{ fontWeight: "bold", color: "white" }}>
-              {monster.level}
-            </span>
-          </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 }
