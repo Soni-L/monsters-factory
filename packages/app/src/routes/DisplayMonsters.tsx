@@ -71,9 +71,9 @@ export default function DisplayMonsters() {
       <div
         style={{
           padding: "10px",
-          display: "flex",
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr)",
           gap: "15px",
-          flexWrap: "wrap",
           justifyContent: "center",
           marginBottom: "40px",
           overflowY: "scroll",
@@ -91,6 +91,7 @@ export default function DisplayMonsters() {
           >
             <div
               style={{
+                position: "relative",
                 height: "200px",
                 width: "300px",
                 backgroundColor:
@@ -102,6 +103,22 @@ export default function DisplayMonsters() {
                 justifyContent: "end",
               }}
             >
+              <p
+                style={{
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -100%)",
+                  fontWeight: "bold",
+                  fontFamily: "The halloween",
+                  fontSize: "9px",
+                  color: "yellow",
+                  textShadow: "2px 2px black",
+                  letterSpacing: "1px",
+                }}
+              >
+                {monster.name}
+              </p>
               <ActionsMenu onDelete={() => handleDeleteMonster(monster)} />
             </div>
 

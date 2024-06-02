@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { stringToColorCode } from "../common/helperFunctions";
 import { Monster } from "../types/MonsterTypes";
+import { Card } from "@mui/material";
 const BACKEND_URL = import.meta.env.VITE_APP_BACKEND_URL;
 
 function removeMatchingObjects(array1, array2) {
@@ -136,26 +137,22 @@ export default function MonsterShow() {
   return (
     <div
       style={{
+        backgroundColor: "black",
         padding: "10px",
         display: "grid",
         gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr)",
+        justifyContent: "start",
         gap: "15px",
-        marginBottom: "40px",
         overflowY: "scroll",
         overflowX: "hidden",
-        height: "calc(100vh - 120px)",
+        height: "calc(100vh - 65px)",
       }}
     >
       {displayMonsters.map((monster: Monster) => (
-        <div
-          key={monster._id}
-          style={{
-            display: "flex",
-            flexDirection: "column",
-          }}
-        >
+        <div key={monster._id}>
           <div
             style={{
+              position: "relative",
               height: "200px",
               width: "300px",
               backgroundColor:
@@ -166,10 +163,29 @@ export default function MonsterShow() {
               display: "flex",
               justifyContent: "end",
             }}
-          ></div>
-          <div>
+          >
+            <p
+              style={{
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -100%)",
+                fontWeight: "bold",
+                fontFamily: "The halloween",
+                fontSize: "9px",
+                color: "yellow",
+                textShadow: "2px 2px black",
+                letterSpacing: "1px",
+              }}
+            >
+              {monster.name}
+            </p>
+          </div>
+          <div style={{ color: "white" }}>
             {monster?.name} level:
-            <span style={{ fontWeight: "bold" }}>{monster.level}</span>
+            <span style={{ fontWeight: "bold", color: "white" }}>
+              {monster.level}
+            </span>
           </div>
         </div>
       ))}
