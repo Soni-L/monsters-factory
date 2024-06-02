@@ -1,21 +1,13 @@
 import React, { useState } from "react";
 import { TextField, Button, Container, Typography, Box } from "@mui/material";
-
-interface Monster {
-  name: string;
-  level: number;
-  type: {
-    species: string;
-    sub_species: string;
-  };
-}
+import { MintedMonster } from "../types/MonsterTypes";
 
 interface MonsterFormProps {
-  onSubmit: (monster: Monster) => void;
+  onSubmit: (monster: MintedMonster) => void;
 }
 
 const CustomMonsterForm: React.FC<MonsterFormProps> = ({ onSubmit }) => {
-  const [monster, setMonster] = useState<Monster>({
+  const [monster, setMonster] = useState<MintedMonster>({
     name: "",
     level: 0,
     type: {

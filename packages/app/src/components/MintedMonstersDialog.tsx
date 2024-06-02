@@ -9,6 +9,7 @@ import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import { useState } from "react";
 import Snackbar from "@mui/material/Snackbar";
+import { stringToColorCode } from "../common/helperFunctions";
 const BACKEND_URL = import.meta.env.VITE_APP_BACKEND_URL;
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -20,21 +21,6 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   },
 }));
 
-function stringToColorCode(text: string) {
-  // Generate a hash code from the input text
-  let hash = 0;
-  for (let i = 0; i < text.length; i++) {
-    hash = text.charCodeAt(i) + ((hash << 5) - hash);
-  }
-
-  // Convert hash code to hex
-  const color =
-    ((hash >> 16) & 0xff).toString(16).padStart(2, "0") +
-    ((hash >> 8) & 0xff).toString(16).padStart(2, "0") +
-    (hash & 0xff).toString(16).padStart(2, "0");
-
-  return color.toUpperCase();
-}
 
 export default function MintedMonstersDialog({
   open,

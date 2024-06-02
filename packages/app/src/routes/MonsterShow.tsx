@@ -1,16 +1,7 @@
 import { useState, useEffect, useRef } from "react";
+import { stringToColorCode } from "../common/helperFunctions";
+import { Monster } from "../types/MonsterTypes";
 const BACKEND_URL = import.meta.env.VITE_APP_BACKEND_URL;
-
-interface MonsterType {
-  species: string;
-  sub_species: string;
-}
-interface Monster {
-  _id: string;
-  name: string;
-  level: number;
-  type: MonsterType;
-}
 
 function removeMatchingObjects(array1, array2) {
   try {
@@ -30,22 +21,6 @@ function removeMatchingObjects(array1, array2) {
 function isTimestampOlderThan10Seconds(timestamp) {
   const currentTime = Math.floor(Date.now() / 1000); // Unix timestamp in seconds
   return currentTime - timestamp > 10;
-}
-
-function stringToColorCode(text: string) {
-  // Generate a hash code from the input text
-  let hash = 0;
-  for (let i = 0; i < text.length; i++) {
-    hash = text.charCodeAt(i) + ((hash << 5) - hash);
-  }
-
-  // Convert hash code to hex
-  const color =
-    ((hash >> 16) & 0xff).toString(16).padStart(2, "0") +
-    ((hash >> 8) & 0xff).toString(16).padStart(2, "0") +
-    (hash & 0xff).toString(16).padStart(2, "0");
-
-  return color.toUpperCase();
 }
 
 export default function MonsterShow() {
