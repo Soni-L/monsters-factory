@@ -6,8 +6,8 @@ import {
   CircularProgress,
   Button,
   Snackbar,
+  TextField,
 } from "@mui/material";
-import NumberInput from "../components/NumberInput";
 import MintedMonstersDialog from "../components/MintedMonstersDialog";
 import generateRandomMonster from "../common/generateRandomMonster";
 import CustomMonsterForm from "../components/CustomMonsterForm";
@@ -90,6 +90,29 @@ export default function CreateMonsters() {
       }
 
       await response.json();
+      setOpenSnackbar(false);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  }
+
+  async function handleSaveMinted(data) {
+    try {
+      const response = await fetch(BACKEND_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      await response.json();
+      setMintedMonstersDialog(false);
+      setMintedMonsters([]);
       setOpenSnackbar(true);
     } catch (error) {
       console.error("Error:", error);
@@ -120,16 +143,23 @@ export default function CreateMonsters() {
             display: "flex",
             gap: "10px",
             justifyContent: "center",
+            alignItems: "center",
           }}
         >
-          <NumberInput
-            placeholder="Number of desired monsters"
+          <TextField
+            style={{ maxWidth: "200px", margin: "0" }}
+            margin="normal"
+            label="Number of monsters"
+            name="level"
+            type="number"
             value={monstersToMint}
-            setValue={(val) => setMonstersToMint(val)}
+            onChange={(e: React.SyntheticEvent) =>
+              setMonstersToMint(e.target.value)
+            }
           />
           <Button
             variant="contained"
-            style={{ borderRadius: "8px" }}
+            style={{ borderRadius: "8px", height: "50px" }}
             onClick={() => handleGenerateRandomMonsters(monstersToMint)}
             endIcon={
               mintLoading ? <CircularProgress color="inherit" size={16} /> : ""
@@ -154,6 +184,7 @@ export default function CreateMonsters() {
 
       <MintedMonstersDialog
         open={mintedMonstersDialog}
+        handleSave={handleSaveMinted}
         handleClose={handleDialogClose}
         mintedMonsters={mintedMonsters}
       />

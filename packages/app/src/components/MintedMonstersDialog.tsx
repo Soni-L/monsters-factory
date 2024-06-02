@@ -8,9 +8,8 @@ import DialogActions from "@mui/material/DialogActions";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import { useState } from "react";
-import Snackbar from "@mui/material/Snackbar";
 import { stringToColorCode } from "../common/helperFunctions";
-const BACKEND_URL = import.meta.env.VITE_APP_BACKEND_URL;
+import { MintedMonster } from "../types/MonsterTypes";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -21,49 +20,13 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   },
 }));
 
-
 export default function MintedMonstersDialog({
   open,
   handleClose,
+  handleSave,
   mintedMonsters,
 }) {
   const [loading, setLoading] = useState<boolean>(false);
-  const [openSnackbar, setOpenSnackbar] = React.useState(false);
-
-  const handleCloseSnackbar = (
-    event: React.SyntheticEvent | Event,
-    reason?: string
-  ) => {
-    if (reason === "clickaway") {
-      return;
-    }
-
-    setOpenSnackbar(false);
-  };
-
-  async function handleSave(data) {
-    try {
-      setLoading(true);
-      const response = await fetch(BACKEND_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-
-      await response.json();
-      setOpenSnackbar(true);
-      setLoading(false);
-    } catch (error) {
-      setLoading(false);
-      console.error("Error:", error);
-    }
-  }
 
   return (
     <React.Fragment>
@@ -98,9 +61,8 @@ export default function MintedMonstersDialog({
               padding: "20px",
             }}
           >
-            {mintedMonsters.map((monster) => (
+            {mintedMonsters.map((monster: MintedMonster) => (
               <div
-                key={monster._id}
                 style={{
                   display: "flex",
                   flexDirection: "column",
@@ -129,35 +91,15 @@ export default function MintedMonstersDialog({
           </div>
         </DialogContent>
         <DialogActions>
-          {loading ? (
-            <Button
-              variant="contained"
-              disabled
-              style={{ borderRadius: "8px" }}
-              onClick={() => handleSave(mintedMonsters)}
-              endIcon={<CircularProgress color="inherit" size={16} />}
-            >
-              Save
-            </Button>
-          ) : (
-            <Button
-              variant="contained"
-              style={{ borderRadius: "8px" }}
-              onClick={() => handleSave(mintedMonsters)}
-            >
-              Save
-            </Button>
-          )}
+          <Button
+            variant="contained"
+            style={{ borderRadius: "8px" }}
+            onClick={() => handleSave(mintedMonsters)}
+          >
+            Save
+          </Button>
         </DialogActions>
       </BootstrapDialog>
-
-      <Snackbar
-        open={openSnackbar}
-        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-        autoHideDuration={6000}
-        onClose={handleCloseSnackbar}
-        message="Monsters saved"
-      />
     </React.Fragment>
   );
 }
