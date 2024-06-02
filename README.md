@@ -1,10 +1,12 @@
-# Local run
-
-npm install -g lerna
-npm install -g concurrently
-either execute "npm run dev" 
+## Live site preview :rocket:
+http://165.227.153.244:5173
 
 
-# Docker setup
+## Local Installation 🛠
+1. npm install -g lerna
+2. npm install -g concurrently
+3. run "npm run dev" 
 
+
+## Docker setup
 run the command "docker-compose up --build"
