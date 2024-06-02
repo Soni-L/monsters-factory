@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, memo } from "react";
 import { stringToColorCode } from "../common/helperFunctions";
 import { Monster } from "../types/MonsterTypes";
 import { Typography } from "@mui/material";
@@ -24,19 +24,42 @@ function isTimestampOlderThan10Seconds(timestamp) {
   return currentTime - timestamp > 10;
 }
 
-const pulsatingTextStyle = {
-  animation: "pulsate 1s infinite cubic-bezier(.17,.67,.83,.67)",
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -300%)",
-  fontWeight: "bold",
-  fontFamily: "The halloween",
-  color: "yellow",
-  textShadow: "2px 2px #512888",
-  letterSpacing: "2px",
-  fontSize: "20px",
-};
+function Banner() {
+  return (
+    <div
+      style={{
+        backgroundColor: "black",
+        height: "calc(100vh - 64px)",
+        position: "relative",
+      }}
+    >
+      <Typography
+        sx={{
+          animation: "pulsate 1s infinite cubic-bezier(.17,.67,.83,.67)",
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -300%)",
+          fontWeight: "bold",
+          fontFamily: "The halloween",
+          color: "yellow",
+          textShadow: "2px 2px #512888",
+          letterSpacing: "2px",
+          fontSize: "20px",
+          "@keyframes pulsate": {
+            "0%": { opacity: 1 },
+            "50%": { opacity: 0.5 },
+            "100%": { opacity: 1 },
+          },
+        }}
+      >
+        Beginning show
+      </Typography>
+    </div>
+  );
+}
+
+const MemoizedBanner = memo(Banner);
 
 export default function MonsterShow() {
   const [displayMonsters, setDisplayMonsters] = useState([]);
@@ -149,17 +172,7 @@ export default function MonsterShow() {
   }, [displayMonsters]);
 
   if (displayMonsters.length === 0) {
-    return (
-      <div
-        style={{
-          backgroundColor: "black",
-          height: "calc(100vh - 64px)",
-          position: "relative",
-        }}
-      >
-        <Typography sx={pulsatingTextStyle}>Beginning show</Typography>
-      </div>
-    );
+    return <MemoizedBanner />;
   }
 
   return (
