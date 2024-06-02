@@ -66,6 +66,7 @@ export default function MintedMonstersDialog({
                   flexDirection: "column",
                   width: "160px",
                   borderRadius: "8px",
+                  borderLeft: '1px solid lightgray',
                   boxShadow: "2px 2px gray",
                 }}
               >
@@ -89,8 +90,9 @@ export default function MintedMonstersDialog({
                     display: "grid",
                     gridTemplateColumns: "1fr 1fr",
                     justifyContent: "space-around",
-                    gap: "2px",
+                    gap: "3px",
                     padding: "4px",
+                    paddingLeft: '8px',
                   }}
                 >
                   <CustomTypography>
