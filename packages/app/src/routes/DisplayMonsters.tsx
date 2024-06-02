@@ -116,7 +116,7 @@ export default function DisplayMonsters() {
             key={monster._id}
             style={{
               border: "1px solid lightgray",
-              borderRadius: "6px",
+              borderRadius: "8px",
               boxShadow: "1px 1px",
               padding: "4px",
               width: "310px",
@@ -134,6 +134,7 @@ export default function DisplayMonsters() {
                   ),
                 display: "flex",
                 justifyContent: "end",
+                borderRadius: "8px 8px 0 0",
               }}
             >
               <p
