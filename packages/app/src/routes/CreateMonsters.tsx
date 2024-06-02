@@ -7,6 +7,7 @@ import {
   Button,
   Snackbar,
   TextField,
+  Alert,
 } from "@mui/material";
 import MintedMonstersDialog from "../components/MintedMonstersDialog";
 import generateRandomMonster from "../common/generateRandomMonster";
@@ -143,30 +144,58 @@ export default function CreateMonsters() {
             display: "flex",
             gap: "10px",
             justifyContent: "center",
-            alignItems: "center",
+            alignItems: "start",
           }}
         >
           <TextField
-            style={{ maxWidth: "200px", margin: "0" }}
+            style={{ maxWidth: "150px", margin: "0", padding: "0" }}
             margin="normal"
             label="Number of monsters"
             name="level"
             type="number"
+            error={monstersToMint < 1 || monstersToMint > 100}
+            helperText={
+              monstersToMint < 1 || monstersToMint > 100
+                ? "Choose a value between 1 - 100"
+                : ""
+            }
             value={monstersToMint}
             onChange={(e: React.SyntheticEvent) =>
               setMonstersToMint(e.target.value)
             }
           />
-          <Button
-            variant="contained"
-            style={{ borderRadius: "8px", height: "50px" }}
-            onClick={() => handleGenerateRandomMonsters(monstersToMint)}
-            endIcon={
-              mintLoading ? <CircularProgress color="inherit" size={16} /> : ""
-            }
-          >
-            Mint
-          </Button>
+          {monstersToMint < 1 || monstersToMint > 100 ? (
+            <Button
+              disabled
+              variant="contained"
+              style={{ borderRadius: "8px", height: "55px", minWidth: "80px" }}
+              onClick={() => handleGenerateRandomMonsters(monstersToMint)}
+              endIcon={
+                mintLoading ? (
+                  <CircularProgress color="inherit" size={16} />
+                ) : (
+                  ""
+                )
+              }
+            >
+              Mint
+            </Button>
+          ) : (
+            <Button
+              variant="contained"
+              style={{ borderRadius: "8px", height: "55px", minWidth: "80px" }}
+              onClick={() => handleGenerateRandomMonsters(monstersToMint)}
+              endIcon={
+                mintLoading ? (
+                  <CircularProgress color="inherit" size={16} />
+                ) : (
+                  ""
+                )
+              }
+            >
+              Mint
+            </Button>
+          )}
         </div>
       )}
 
@@ -192,10 +221,18 @@ export default function CreateMonsters() {
       <Snackbar
         open={openSnackbar}
         anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-        autoHideDuration={6000}
+        autoHideDuration={5000}
         onClose={handleCloseSnackbar}
-        message="Monsters saved"
-      />
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity="success"
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          Monsters saved
+        </Alert>
+      </Snackbar>
     </div>
   );
 }
