@@ -1,32 +1,20 @@
-# Stage 1: Build the application
-FROM node:20 AS build
+# Use the official Node.js version from https://hub.docker.com/
+FROM node:alpine
 
-# Set the working directory
+# Set the working directory inside the container to /app
 WORKDIR /app
 
-# Copy the package.json and package-lock.json files
-COPY package*.json ./
+# Copy only the package.json file to the working directory
+COPY package.json .
 
-# Install dependencies
+# Install npm dependencies based on the package.json
 RUN npm install
 
-# Copy the rest of the application code
+# Copy the rest of the application code to the working directory
 COPY . .
 
-# Build the application
-RUN npm run build
+EXPOSE 8080
 
-# Stage 2: Serve the application with nginx
-FROM nginx:alpine
+# Specify the command to run the application when the container starts
+CMD  ["npm", "run", "dev", "--", "--host", "0.0.0.0", "--port", "8080"];
 
-# Copy the build output to the nginx html directory
-COPY --from=build /app/dist /usr/share/nginx/html
-
-# Copy custom nginx configuration if needed
-COPY nginx.conf /etc/nginx/nginx.conf
-
-# Expose port 80
-EXPOSE 80
-
-# Start nginx
-CMD ["nginx", "-g", "daemon off;"]
