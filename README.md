@@ -1,2 +1,10 @@
 # Local run
-either execute "npm run dev" or "docker-compose up --build"
+
+npm install -g lerna
+npm install -g concurrently
+either execute "npm run dev" 
+
+
+# Docker setup
+
+run the command "docker-compose up --build"
