@@ -91,7 +91,7 @@ export default function CreateMonsters() {
       }
 
       await response.json();
-      setOpenSnackbar(false);
+      setOpenSnackbar(true);
     } catch (error) {
       console.error("Error:", error);
     }
@@ -140,7 +140,7 @@ export default function CreateMonsters() {
           style={{
             padding: "20px",
             margin: "auto",
-            width: "400px",
+            maxWidth: "400px",
             display: "flex",
             gap: "10px",
             justifyContent: "center",
