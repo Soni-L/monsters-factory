@@ -8,3 +8,5 @@ spec:
   type: service
   lifecycle: unknown
   owner: guests
+  definition:
+    $text: https://petstore.swagger.io/v2/swagger.json
