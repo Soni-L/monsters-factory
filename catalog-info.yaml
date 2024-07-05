@@ -4,6 +4,8 @@ metadata:
   name: monsters-factory
   annotations:
     github.com/project-slug: Soni-L/monsters-factory
+    argocd/applications: idp-ita-sisal-prod-a
+    argocd/componentName: backstage
 spec:
   type: service
   lifecycle: unknown
